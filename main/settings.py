@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import shutil
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,11 +85,6 @@ INTERNAL_IPS = [
 ]
 
 # NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
-
-from pathlib import Path
-import os
-import shutil
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 NPM_BIN_PATH = shutil.which("npm") or "npm"
