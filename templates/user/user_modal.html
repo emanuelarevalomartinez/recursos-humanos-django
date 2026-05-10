@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div id="deleteModal" class="fixed inset-0 z-50 items-center justify-center overflow-hidden hidden">
+    <div onclick="hideModal()" class="fixed inset-0 bg-black/50 cursor-pointer"></div>
+    <div class="relative w-full max-w-sm p-4 bg-white dark:bg-gray-800 rounded-xl mx-auto z-10">
+
+        <!-- Modal content -->
+        <div class="space-y-2 text-center dark:text-white">
+            <h2 class="text-xl font-bold tracking-tight">Eliminar</h2>
+            <p class="text-gray-500">¿Esta seguro de que quiere eliminar esto?</p>
+        </div>
+
+        <!-- Modal actions -->
+        <div class="mt-4 grid gap-2 grid-cols-2">
+            
+            <button onclick="hideModal()" id="closeModal" type="button" class="bg-gray-300 py-2 px-4 rounded-md text-gray-700 hover:bg-gray-400">
+                Cancelar
+            </button>       
+                <button id="confirmDelete"
+                    class="bg-red-600 py-2 px-4 rounded-md text-white hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-600">
+                    Confirmar
+                </button>
+            </div>
+           
+    </div>
+</div>
+
+
+
+{% endblock %}

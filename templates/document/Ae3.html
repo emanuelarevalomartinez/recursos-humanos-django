@@ -1,0 +1,2234 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="w-screen h-screen flex">
+
+    <!-- loading -->
+
+    {% include 'loading/loading.html' %}
+
+    <!-- modal generic for confirm data load -->
+
+    {% include 'loading/modal_generic.html' %}
+
+    <div class="flex bg-gray-100"> </div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center h-16 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="{% url 'user_session' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/user_history.svg' %}" alt="Historic Icon">
+                    Inicio
+                </a>
+                <a href="{% url 'user_history' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+                <a href="{% url 'ae2' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table.svg' %}" alt="Table Icon">
+                    AE2
+                </a>
+
+                <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-100 bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table.svg' %}" alt="Table Icon">
+                    AE3
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+        <div class="flex items-center justify-between py-5 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+        <div class="p-4">
+
+            <!--  view a e3 user data  -->
+
+            <div class="my-4">
+                <div>
+                    <h1 class=" text-2xl xl:text-3xl font-bold"> AE3 </h1>
+                </div>
+
+                <div>
+                    <form method="post">
+                        <div class="overflow-x-auto min-w-full">
+
+
+                            {% csrf_token %}
+                            <table class="table-auto border-collapse min-w-full w-full bg-white shadow-md">
+                                <thead>
+                                    <tr>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-2/12">
+                                            Indicadores</th>
+                                            
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Cubierta</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Fem.
+                                        </th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Total</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Fem</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">PT</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">PA</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">As</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">I</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Aux</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Msc</th>
+                                        <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Dr</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Fila 1 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">1 - Total Cuadros</td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador1"
+                                            disabled
+                                            value="{{predata.indicador1}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador16"
+                                            disabled
+                                            value="{{predata.indicador16}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador17"
+                                            disabled
+                                            value="{{predata.indicador17}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador18"
+                                            disabled
+                                            value="{{predata.indicador18}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador19"
+                                            disabled
+                                            value="{{predata.indicador19}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador20"
+                                            disabled
+                                            value="{{predata.indicador20}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador21"
+                                            disabled
+                                            value="{{predata.indicador21}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador22"
+                                            disabled
+                                            value="{{predata.indicador22}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador23"
+                                            disabled
+                                            value="{{predata.indicador23}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador24"
+                                            disabled
+                                            value="{{predata.indicador24}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador25"
+                                            disabled
+                                            value="{{predata.indicador25}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila2 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">2 - Cuadros Docentes</td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador2"
+                                            value="{{predata.indicador2}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador26"
+                                            value="{{predata.indicador26}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador27"
+                                            value="{{predata.indicador27}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador28"
+                                            value="{{predata.indicador28}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador29"
+                                            value="{{predata.indicador29}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador30"
+                                            value="{{predata.indicador30}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador31"
+                                            value="{{predata.indicador31}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador32"
+                                            value="{{predata.indicador32}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador33"
+                                            value="{{predata.indicador33}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador34"
+                                            value="{{predata.indicador34}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador35"
+                                            value="{{predata.indicador35}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 3 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">3 - Cuadros Administrativos
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador3"
+                                            value="{{predata.indicador3}}"
+                                                class="w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador36"
+                                            value="{{predata.indicador36}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador37"
+                                            value="{{predata.indicador37}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador38"
+                                            value="{{predata.indicador38}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador39"
+                                            value="{{predata.indicador39}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador40"
+                                            value="{{predata.indicador40}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador41"
+                                            value="{{predata.indicador41}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador42"
+                                            value="{{predata.indicador42}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador43"
+                                            value="{{predata.indicador43}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador44"
+                                            value="{{predata.indicador44}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador45"
+                                            value="{{predata.indicador45}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 4 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">4 - Cuadros Investigativos
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador4"
+                                            value="{{predata.indicador4}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador46"
+                                            value="{{predata.indicador46}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador47"
+                                            value="{{predata.indicador47}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador48"
+                                            value="{{predata.indicador48}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador49"
+                                            value="{{predata.indicador49}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador50"
+                                            value="{{predata.indicador50}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador51"
+                                            value="{{predata.indicador51}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador52"
+                                            value="{{predata.indicador52}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador53"
+                                            value="{{predata.indicador53}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador54"
+                                            value="{{predata.indicador54}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador55"
+                                            value="{{predata.indicador55}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 5 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">5 - Otros Cuadros
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador5"
+                                            value="{{predata.indicador5}}"
+                                                class="w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador56"
+                                            value="{{predata.indicador56}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador57"
+                                            value="{{predata.indicador57}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador58"
+                                            value="{{predata.indicador58}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador59"
+                                            value="{{predata.indicador59}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador60"
+                                            value="{{predata.indicador60}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador61"
+                                            value="{{predata.indicador61}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador62"
+                                            value="{{predata.indicador62}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador63"
+                                            value="{{predata.indicador63}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador64"
+                                            value="{{predata.indicador64}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador65"
+                                            value="{{predata.indicador65}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 6 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">6 - Total Técnicos
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="6"
+                                            id="indicador6"
+                                            disabled
+                                            value="{{predata.indicador6}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador66"
+                                            disabled
+                                            value="{{predata.indicador66}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador67"
+                                            disabled
+                                            value="{{predata.indicador67}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador68"
+                                            disabled
+                                            value="{{predata.indicador68}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador69"
+                                            disabled
+                                            value="{{predata.indicador69}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador70"
+                                            disabled
+                                            value="{{predata.indicador70}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador71"
+                                            disabled
+                                            value="{{predata.indicador71}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador72"
+                                            value="{{predata.indicador72}}"
+                                            disabled
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador73"
+                                            disabled
+                                            value="{{predata.indicador73}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador74"
+                                            disabled
+                                            value="{{predata.indicador74}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador75"
+                                            disabled
+                                            value="{{predata.indicador75}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 7 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">7 - Profesores a Tiempo Completo
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador7"
+                                            value="{{predata.indicador7}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador76"
+                                            value="{{predata.indicador76}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador77"
+                                            value="{{predata.indicador77}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador78"
+                                            value="{{predata.indicador78}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador79"
+                                            value="{{predata.indicador79}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador80"
+                                            value="{{predata.indicador80}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador81"
+                                            value="{{predata.indicador81}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador82"
+                                            value="{{predata.indicador82}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador83"
+                                            value="{{predata.indicador83}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador84"
+                                            value="{{predata.indicador84}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador85"
+                                            value="{{predata.indicador85}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 8 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">8 - Asesores o Metodólogos
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador8"
+                                            value="{{predata.indicador8}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador86"
+                                            value="{{predata.indicador86}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador87"
+                                            value="{{predata.indicador87}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador88"
+                                            value="{{predata.indicador88}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador89"
+                                            value="{{predata.indicador89}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador90"
+                                            value="{{predata.indicador90}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador91"
+                                            value="{{predata.indicador91}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador92"
+                                            value="{{predata.indicador92}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador93"
+                                            value="{{predata.indicador93}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador94"
+                                            value="{{predata.indicador94}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador95"
+                                            value="{{predata.indicador95}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 9 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">9 - Investigadores
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador9"
+                                            value="{{predata.indicador9}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador96"
+                                            value="{{predata.indicador96}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador97"
+                                            value="{{predata.indicador97}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador98"
+                                            value="{{predata.indicador98}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador99"
+                                            value="{{predata.indicador99}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador100"
+                                            value="{{predata.indicador100}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador101"
+                                            value="{{predata.indicador101}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador102"
+                                            value="{{predata.indicador102}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador103"
+                                            value="{{predata.indicador103}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador104"
+                                            value="{{predata.indicador104}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador105"
+                                            value="{{predata.indicador105}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 10 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">10 - Otros Técnicos
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador10"
+                                            value="{{predata.indicador10}}"
+                                                class="w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador106"
+                                            value="{{predata.indicador106}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador107"
+                                            value="{{predata.indicador107}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador108"
+                                            value="{{predata.indicador108}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador109"
+                                            value="{{predata.indicador109}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador110"
+                                            value="{{predata.indicador110}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador111"
+                                            value="{{predata.indicador111}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador112"
+                                            value="{{predata.indicador112}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador113"
+                                            value="{{predata.indicador113}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador114"
+                                            value="{{predata.indicador114}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador115"
+                                            value="{{predata.indicador115}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 11 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">11 - Administrativos
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador11"
+                                            value="{{predata.indicador11}}"
+                                                class="w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador116"
+                                            value="{{predata.indicador116}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador117"
+                                            value="{{predata.indicador117}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador118"
+                                            value="{{predata.indicador118}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador119"
+                                            value="{{predata.indicador119}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador120"
+                                            value="{{predata.indicador120}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador121"
+                                            value="{{predata.indicador121}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador122"
+                                            value="{{predata.indicador122}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador123"
+                                            value="{{predata.indicador123}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador124"
+                                            value="{{predata.indicador124}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador125"
+                                            value="{{predata.indicador125}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 12 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">12 - Servicios
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador12"
+                                            value="{{predata.indicador12}}"
+                                                class="w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador126"
+                                            value="{{predata.indicador126}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador127"
+                                            value="{{predata.indicador127}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador128"
+                                            value="{{predata.indicador128}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador129"
+                                            value="{{predata.indicador129}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador130"
+                                            value="{{predata.indicador130}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador131"
+                                            value="{{predata.indicador131}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador132"
+                                            value="{{predata.indicador132}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador133"
+                                            value="{{predata.indicador133}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador134"
+                                            value="{{predata.indicador134}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador135"
+                                            value="{{predata.indicador135}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 13 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">13 - Operarios
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador13"
+                                            value="{{predata.indicador13}}"
+                                                class="w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador136"
+                                            value="{{predata.indicador136}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador137"
+                                            value="{{predata.indicador137}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador138"
+                                            value="{{predata.indicador138}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador139"
+                                            value="{{predata.indicador139}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador140"
+                                            value="{{predata.indicador140}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador141"
+                                            value="{{predata.indicador141}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador142"
+                                            value="{{predata.indicador142}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador143"
+                                            value="{{predata.indicador143}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador144"
+                                            value="{{predata.indicador144}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador145"
+                                            value="{{predata.indicador145}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 14 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">14 - Total
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador14"
+                                            value="{{predata.indicador14}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador146"
+                                            disabled
+                                            value="{{predata.indicador146}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador147"
+                                            disabled
+                                            value="{{predata.indicador147}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador148"
+                                            disabled
+                                            value="{{predata.indicador148}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador149"
+                                            disabled
+                                            value="{{predata.indicador149}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador150"
+                                            disabled
+                                            value="{{predata.indicador150}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador151"
+                                            disabled
+                                            value="{{predata.indicador151}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador152"
+                                            disabled
+                                            value="{{predata.indicador152}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador153"
+                                            disabled
+                                            value="{{predata.indicador153}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador154"
+                                            disabled
+                                            value="{{predata.indicador154}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador155"
+                                            disabled
+                                            value="{{predata.indicador155}}"
+                                                class="bg-yellow-300 w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    <!-- fila 15 -->
+                                    <tr>
+                                        <td class="border border-black pl-1 w-2/12 min-w-96">15 - Profesores a Tiempo Parcial
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador15"
+                                            value="{{predata.indicador15}}"
+                                                class="bg-yellow-300 w-24 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador156"
+                                            value="{{predata.indicador156}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador157"
+                                            value="{{predata.indicador157}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador158"
+                                            value="{{predata.indicador158}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador159"
+                                            value="{{predata.indicador159}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador160"
+                                            value="{{predata.indicador160}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador161"
+                                            value="{{predata.indicador161}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador162"
+                                            value="{{predata.indicador162}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador163"
+                                            value="{{predata.indicador163}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required 
+                                            min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador164"
+                                            value="{{predata.indicador164}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                        <td class="border border-black w-1/12">
+                                            <input type="number" 
+                                            required min="0" 
+                                            step="1" 
+                                            placeholder="0"
+                                            id="indicador165"
+                                            value="{{predata.indicador165}}"
+                                                class="w-20 text-end">
+                                        </td>
+                                    </tr>
+                                    </thead>
+                            </table>
+
+                        </div>
+
+                        <!-- input -->
+
+                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 mx-8">
+                            <div class="flex flex-col">
+                                <label class="block text-base h-12 place-content-end font-medium">
+                                    Confeccionado:
+                                </label>
+                                <input type='text' 
+                                required 
+                                id="indicador167"
+                                    placeholder="Confeccionado Por"
+                                    class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="block text-base h-12 place-content-end font-medium">
+                                    Aprobado:
+                                </label>
+                                <input type='text' 
+                                required 
+                                id="indicador168" 
+                                placeholder="Aprobado por"
+                                    class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                            </div>
+                            <div class="flex flex-col col-span-1 sm:col-span-2">
+                                <label for="username" class="block text-base h-12 place-content-end font-medium">
+                                    Observaciones:
+                                </label>
+                                <input type='text' 
+                                required 
+                                id="indicador166" 
+                                placeholder="Observaciones:"
+                                    class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                            </div>
+                        </div>
+
+                        <div class="flex w-full justify-center mt-4">
+                            <button
+                                class="bg-blue-600 hover:bg-blue-700 text-gray-200 font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out text-xl px-4"
+                                type="submit">Aceptar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script>
+
+    const toggleButton = document.getElementById('toggleButton');
+
+    const inputsNumerics = document.querySelectorAll('input[type="number"]');
+
+    // new ae3 data
+    const indicador1 = document.getElementById('indicador1');
+    const indicador2 = document.getElementById('indicador2');
+    const indicador3 = document.getElementById('indicador3');
+    const indicador4 = document.getElementById('indicador4');
+    const indicador5 = document.getElementById('indicador5');
+    const indicador6 = document.getElementById('indicador6');
+    const indicador7 = document.getElementById('indicador7');
+    const indicador8 = document.getElementById('indicador8');
+    const indicador9 = document.getElementById('indicador9');
+    const indicador10 = document.getElementById('indicador10');
+    const indicador11 = document.getElementById('indicador11');
+    const indicador12 = document.getElementById('indicador12');
+    const indicador13 = document.getElementById('indicador13');
+    const indicador14 = document.getElementById('indicador14');
+    const indicador15 = document.getElementById('indicador15');
+    const indicador16 = document.getElementById('indicador16');
+    const indicador17 = document.getElementById('indicador17');
+    const indicador18 = document.getElementById('indicador18');
+    const indicador19 = document.getElementById('indicador19');
+    const indicador20 = document.getElementById('indicador20');
+    const indicador21 = document.getElementById('indicador21');
+    const indicador22 = document.getElementById('indicador22');
+    const indicador23 = document.getElementById('indicador23');
+    const indicador24 = document.getElementById('indicador24');
+    const indicador25 = document.getElementById('indicador25');
+    const indicador26 = document.getElementById('indicador26');
+    const indicador27 = document.getElementById('indicador27');
+    const indicador28 = document.getElementById('indicador28');
+    const indicador29 = document.getElementById('indicador29');
+    const indicador30 = document.getElementById('indicador30');
+    const indicador31 = document.getElementById('indicador31');
+    const indicador32 = document.getElementById('indicador32');
+    const indicador33 = document.getElementById('indicador33');
+    const indicador34 = document.getElementById('indicador34');
+    const indicador35 = document.getElementById('indicador35');
+    const indicador36 = document.getElementById('indicador36');
+    const indicador37 = document.getElementById('indicador37');
+    const indicador38 = document.getElementById('indicador38');
+    const indicador39 = document.getElementById('indicador39');
+    const indicador40 = document.getElementById('indicador40');
+    const indicador41 = document.getElementById('indicador41');
+    const indicador42 = document.getElementById('indicador42');
+    const indicador43 = document.getElementById('indicador43');
+    const indicador44 = document.getElementById('indicador44');
+    const indicador45 = document.getElementById('indicador45');
+    const indicador46 = document.getElementById('indicador46');
+    const indicador47 = document.getElementById('indicador47');
+    const indicador48 = document.getElementById('indicador48');
+    const indicador49 = document.getElementById('indicador49');
+    const indicador50 = document.getElementById('indicador50');
+    const indicador51 = document.getElementById('indicador51');
+    const indicador52 = document.getElementById('indicador52');
+    const indicador53 = document.getElementById('indicador53');
+    const indicador54 = document.getElementById('indicador54');
+    const indicador55 = document.getElementById('indicador55');
+    const indicador56 = document.getElementById('indicador56');
+    const indicador57 = document.getElementById('indicador57');
+    const indicador58 = document.getElementById('indicador58');
+    const indicador59 = document.getElementById('indicador59');
+    const indicador60 = document.getElementById('indicador60');
+    const indicador61 = document.getElementById('indicador61');
+    const indicador62 = document.getElementById('indicador62');
+    const indicador63 = document.getElementById('indicador63');
+    const indicador64 = document.getElementById('indicador64');
+    const indicador65 = document.getElementById('indicador65');
+    const indicador66 = document.getElementById('indicador66');
+    const indicador67 = document.getElementById('indicador67');
+    const indicador68 = document.getElementById('indicador68');
+    const indicador69 = document.getElementById('indicador69');
+    const indicador70 = document.getElementById('indicador70');
+    const indicador71 = document.getElementById('indicador71');
+    const indicador72 = document.getElementById('indicador72');
+    const indicador73 = document.getElementById('indicador73');
+    const indicador74 = document.getElementById('indicador74');
+    const indicador75 = document.getElementById('indicador75');
+    const indicador76 = document.getElementById('indicador76');
+    const indicador77 = document.getElementById('indicador77');
+    const indicador78 = document.getElementById('indicador78');
+    const indicador79 = document.getElementById('indicador79');
+    const indicador80 = document.getElementById('indicador80');
+    const indicador81 = document.getElementById('indicador81');
+    const indicador82 = document.getElementById('indicador82');
+    const indicador83 = document.getElementById('indicador83');
+    const indicador84 = document.getElementById('indicador84');
+    const indicador85 = document.getElementById('indicador85');
+    const indicador86 = document.getElementById('indicador86');
+    const indicador87 = document.getElementById('indicador87');
+    const indicador88 = document.getElementById('indicador88');
+    const indicador89 = document.getElementById('indicador89');
+    const indicador90 = document.getElementById('indicador90');
+    const indicador91 = document.getElementById('indicador91');
+    const indicador92 = document.getElementById('indicador92');
+    const indicador93 = document.getElementById('indicador93');
+    const indicador94 = document.getElementById('indicador94');
+    const indicador95 = document.getElementById('indicador95');
+    const indicador96 = document.getElementById('indicador96');
+    const indicador97 = document.getElementById('indicador97');
+    const indicador98 = document.getElementById('indicador98');
+    const indicador99 = document.getElementById('indicador99');
+    const indicador100 = document.getElementById('indicador100');
+    const indicador101 = document.getElementById('indicador101');
+    const indicador102 = document.getElementById('indicador102');
+    const indicador103 = document.getElementById('indicador103');
+    const indicador104 = document.getElementById('indicador104');
+    const indicador105 = document.getElementById('indicador105');
+    const indicador106 = document.getElementById('indicador106');
+    const indicador107 = document.getElementById('indicador107');
+    const indicador108 = document.getElementById('indicador108');
+    const indicador109 = document.getElementById('indicador109');
+    const indicador110 = document.getElementById('indicador110');
+    const indicador111 = document.getElementById('indicador111');
+    const indicador112 = document.getElementById('indicador112');
+    const indicador113 = document.getElementById('indicador113');
+    const indicador114 = document.getElementById('indicador114');
+    const indicador115 = document.getElementById('indicador115');
+    const indicador116 = document.getElementById('indicador116');
+    const indicador117 = document.getElementById('indicador117');
+    const indicador118 = document.getElementById('indicador118');
+    const indicador119 = document.getElementById('indicador119');
+    const indicador120 = document.getElementById('indicador120');
+    const indicador121 = document.getElementById('indicador121');
+    const indicador122 = document.getElementById('indicador122');
+    const indicador123 = document.getElementById('indicador123');
+    const indicador124 = document.getElementById('indicador124');
+    const indicador125 = document.getElementById('indicador125');
+    const indicador126 = document.getElementById('indicador126');
+    const indicador127 = document.getElementById('indicador127');
+    const indicador128 = document.getElementById('indicador128');
+    const indicador129 = document.getElementById('indicador129');
+    const indicador130 = document.getElementById('indicador130');
+    const indicador131 = document.getElementById('indicador131');
+    const indicador132 = document.getElementById('indicador132');
+    const indicador133 = document.getElementById('indicador133');
+    const indicador134 = document.getElementById('indicador134');
+    const indicador135 = document.getElementById('indicador135');
+    const indicador136 = document.getElementById('indicador136');
+    const indicador137 = document.getElementById('indicador137');
+    const indicador138 = document.getElementById('indicador138');
+    const indicador139 = document.getElementById('indicador139');
+    const indicador140 = document.getElementById('indicador140');
+    const indicador141 = document.getElementById('indicador141');
+    const indicador142 = document.getElementById('indicador142');
+    const indicador143 = document.getElementById('indicador143');
+    const indicador144 = document.getElementById('indicador144');
+    const indicador145 = document.getElementById('indicador145');
+    const indicador146 = document.getElementById('indicador146');
+    const indicador147 = document.getElementById('indicador147');
+    const indicador148 = document.getElementById('indicador148');
+    const indicador149 = document.getElementById('indicador149');
+    const indicador150 = document.getElementById('indicador150');
+    const indicador151 = document.getElementById('indicador151');
+    const indicador152 = document.getElementById('indicador152');
+    const indicador153 = document.getElementById('indicador153');
+    const indicador154 = document.getElementById('indicador154');
+    const indicador155 = document.getElementById('indicador155');
+    const indicador156 = document.getElementById('indicador156');
+    const indicador157 = document.getElementById('indicador157');
+    const indicador158 = document.getElementById('indicador158');
+    const indicador159 = document.getElementById('indicador159');
+    const indicador160 = document.getElementById('indicador160');
+    const indicador161 = document.getElementById('indicador161');
+    const indicador162 = document.getElementById('indicador162');
+    const indicador163 = document.getElementById('indicador163');
+    const indicador164 = document.getElementById('indicador164');
+    const indicador165 = document.getElementById('indicador165');
+
+    const indicador166 = document.getElementById('indicador166');
+    const indicador167 = document.getElementById('indicador167');
+    const indicador168 = document.getElementById('indicador168');
+
+    const loading = document.getElementById('loading');
+
+    const genericModal = document.getElementById('genericModal');
+    const imgGenericModal = document.getElementById('imgGenericModal');
+    const messageGenericModal = document.getElementById('messageGenericModal');
+
+    let statusGenericModal = false;
+
+    const form = document.querySelector('form');
+
+
+
+    function logout(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al usuario al login
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+    inputsNumerics.forEach(input => {
+        input.addEventListener('input', function () {
+            const valor = this.value;
+            if (valor.includes('.')) {
+                this.value = Math.floor(Number(valor)) || "";
+            } else if (Number(valor) < 0) {
+                this.value = 0;
+            }
+        });
+    });
+
+    function showLoading() {
+        loading.classList.remove('hidden');
+        loading.classList.add('flex');
+
+    }
+
+    function hideLoading() {
+        loading.classList.add('hidden');
+        loading.classList.remove('flex');
+    }
+
+    function showGenericModal() {
+
+        if (statusGenericModal) {
+            messageGenericModal.innerText = 'Documeto Ae3 Actualizado';
+            imgGenericModal.src = '../../static/svgs/confirm.svg';
+        } else {
+            messageGenericModal.innerText = 'Documeto Ae3 No Actualizado';
+            imgGenericModal.src = '../../static/svgs/alert_danger.svg';
+        }
+        genericModal.classList.add('flex');
+        genericModal.classList.remove('hidden');
+    }
+
+    function hiddenGenericModal() {
+        genericModal.classList.add('hidden');
+        genericModal.classList.remove('flex');
+        messageGenericModal.innerText = '';
+        imgGenericModal.src = '';
+    }
+
+    async function updateDataAe3() {
+
+    showLoading();
+
+    const newAe3 = {
+      total_de_cuadros: parseInt(indicador2.value) + parseInt(indicador3.value) + parseInt(indicador4.value) + parseInt(indicador5.value),
+      cuadros_docente: indicador2.value,
+      cuadros_admin: indicador3.value,
+      cuadros_invest: indicador4.value,
+      otros_cuadros: indicador5.value,
+      total_tecnicos: parseInt(indicador7.value) + parseInt(indicador8.value) + parseInt(indicador10.value),
+      prof_tiempo_compl: indicador7.value,
+      asesores_metodol: indicador8.value,
+      investigadores: indicador9.value,
+      otros_tecnicos: indicador10.value,
+      administrativos: indicador11.value,
+      servicio: indicador12.value,
+      operarios: indicador13.value,
+      total: indicador14.value,
+      profe_tiempo_pars: indicador15.value,
+      total_de_cuadros_fem: parseInt(indicador26.value) + parseInt(indicador36.value) + parseInt(indicador46.value) + parseInt(indicador56.value),
+      total_jovenes_t: parseInt(indicador27.value) + parseInt(indicador37.value) + parseInt(indicador47.value) + parseInt(indicador57.value),
+      total_jovenes_t_fem: parseInt(indicador28.value) + parseInt(indicador38.value) + parseInt(indicador48.value) + parseInt(indicador58.value),
+      profe_titular: parseInt(indicador29.value) + parseInt(indicador39.value) + parseInt(indicador49.value) + parseInt(indicador59.value),
+      profe_aux: parseInt(indicador30.value) + parseInt(indicador40.value) + parseInt(indicador50.value) + parseInt(indicador60.value),
+      asistente: parseInt(indicador31.value) + parseInt(indicador41.value) + parseInt(indicador51.value) + parseInt(indicador61.value),
+      instructor: parseInt(indicador32.value) + parseInt(indicador42.value) + parseInt(indicador52.value) + parseInt(indicador62.value),
+      cuadros_docente_fem: indicador26.value,
+      cuadros_docente_jovenes_t: indicador27.value,
+      cuadros_docente_jovenes_t_fem: indicador28.value,
+      cuadros_docente_profe_titular: indicador29.value,
+      cuadros_docente_profe_aux: indicador30.value,
+      cuadros_docente_asistente: indicador31.value,
+      cuadros_docente_instructor: indicador32.value,
+      total_tecnicos_fem: indicador76.value,
+      total_tecnicos_jovenes_t: indicador77.value,
+      total_tecnicos_jovenes_t_fem: indicador78.value,
+      total_tecnicos_profe_titular: indicador79.value,
+      total_tecnicos_profe_aux: indicador80.value,
+      total_tecnicos_asistente: indicador81.value,
+      total_tecnicos_instructor: indicador82.value,
+      observaciones: indicador166.value,
+      confeccionado: indicador167.value,
+      aprobado: indicador168.value,
+    }
+
+        try {
+            const response = await fetch("{% url 'ae3' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                body: JSON.stringify(newAe3),
+            });
+
+            response.json().then(data => {
+                console.log(data);
+
+                if (data.ok === true) {
+                    console.log("ae3 actualizado con exito");
+                    statusGenericModal = true;
+                    showGenericModal();
+                } else {
+                    console.log("ae3 no se actualizo");
+                    statusGenericModal = false;
+                    showGenericModal();
+                }
+            }
+            )
+        } catch (error) {
+            console.log("error inesperado");
+            statusGenericModal = false;
+            showGenericModal();
+        } finally {
+            hideLoading();
+        }
+
+    }
+
+    toggleButton.addEventListener('click', logout);
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        updateDataAe3();
+    })
+
+
+</script>
+
+
+{% endblock %}

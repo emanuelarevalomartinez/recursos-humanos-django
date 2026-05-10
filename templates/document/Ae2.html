@@ -1,0 +1,726 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="w-screen h-screen flex">
+
+    <!-- loading -->
+
+    {% include 'loading/loading.html' %}
+
+    <!-- modal generic for confirm data load -->
+
+    {% include 'loading/modal_generic.html' %}
+
+    <div class="flex bg-gray-100"> </div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center h-16 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="{% url 'user_session' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/user_history.svg' %}" alt="Historic Icon">
+                    Inicio
+                </a>
+                <a href="{% url 'user_history' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-100 bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table.svg' %}" alt="Table Icon">
+                    AE2
+                </a>
+                <a href="{% url 'ae3' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table.svg' %}" alt="Table Icon">
+                    AE3
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+        <div class="flex items-center justify-between py-5 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+        <div class="p-4">
+
+            <!--  view ae2 user data  -->
+
+            <div>
+                <h1 class="text-2xl xl:text-3xl font-bold"> AE2 </h1>
+            </div>
+
+
+
+
+            <div class="overflow-x-auto min-w-full">
+                <form method="post">
+
+                    {% csrf_token %}
+                    <table class="table-auto border-collapse min-w-full w-full bg-white shadow-md">
+                        <thead>
+                            <tr>
+                                <th class="border border-black px-4 py-2 bg-gray-200 text-left w-11/12">Indicadores</th>
+                                <th class="border border-black px-4 py-2 bg-gray-200 text-left w-1/12">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Fila 1 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">1 - Total Plantilla Aprobada</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador1"
+                                    value="{{predata.indicador1}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- Fila 2 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">2 - Total Plantilla Cubierta</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador2"
+                                    value="{{predata.indicador2}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 3 -->
+                            <tr>
+                                <td class="bg-yellow-300 border border-black pl-1 w-11/12">3 - Total General de
+                                    Contratos</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador3"
+                                    value="{{predata.indicador3}}"
+                                        class="bg-yellow-300 w-40 text-end">
+                                </td>
+                            </tr>
+
+                            <!-- fila 4 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">4 - Total de Contratos de Profesores por
+                                    tiempo determinado</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador4"
+                                    value="{{predata.indicador4}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 5 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">5 - De ellos: a tiempo completo</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador5"
+                                    value="{{predata.indicador5}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 6 -->
+                            <tr>
+                                <td class="bg-yellow-300 border border-black pl-1 w-11/12">6 - Total de Contratos No
+                                    Docentes</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador6"
+                                    value="{{predata.indicador6}}"
+                                        class="bg-yellow-300 w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 7 -->
+                            <tr>
+                                <td class="bg-yellow-300 border border-black pl-1 w-11/12">7 - Contratos No Docentes con
+                                    respaldo de plazas</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador7"
+                                    value="{{predata.indicador7}}"
+                                        class="bg-yellow-300 w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 8 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">8 - De ellos: por sustitución</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador8"
+                                    value="{{predata.indicador8}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 9 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">9 - Período de Prueba</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador9"
+                                    value="{{predata.indicador9}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 10 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">10 - Serenos y Auxiliares de Limpieza</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador10"
+                                    value="{{predata.indicador10}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 11 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">11 - Labores Agrícolas</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador11"
+                                    value="{{predata.indicador11}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 12 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">12 - Jubilados</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador12"
+                                    value="{{predata.indicador12}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 13 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">13 - Otros</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador13"
+                                    value="{{predata.indicador13}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 14 -->
+                            <tr>
+                                <td class="bg-yellow-300 border border-black pl-1 w-11/12">14 - Contratos No Docentes
+                                    sin respaldo de plazas</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador14"
+                                    value="{{predata.indicador14}}"
+                                        class="bg-yellow-300 w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 15 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">15 - De ellos: Serenos y Auxiliares de
+                                    Limpieza</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador15"
+                                    value="{{predata.indicador15}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 16 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">16 - Labores Agrícolas</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador16"
+                                    value="{{predata.indicador16}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 17 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">17 - Jubilados</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador17"
+                                    value="{{predata.indicador17}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 18 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">18 - Ejecución de Obra</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador18"
+                                    value="{{predata.indicador18}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 19 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">19 - Otros</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador19"
+                                    value="{{predata.indicador19}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 20 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">20 - Reserva Científica en Preparación</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador20"
+                                    value="{{predata.indicador20}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 21 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">21 - Recién Graduados en Preparación (Nivel
+                                    Sup.)</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador21"
+                                    value="{{predata.indicador21}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 22 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">22 - Reserva Dirección Provincial de
+                                    Trabajo</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador22"
+                                    value="{{predata.indicador22}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 23 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">23 - Técnicos Medios en Preparación</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador23"
+                                    value="{{predata.indicador23}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 24 -->
+                            <tr>
+                                <td class="bg-yellow-300 border border-black pl-1 w-11/12">24 - Total de estudiantes de
+                                    la Universidad de CD contratados por tiempo determinado</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador24"
+                                    value="{{predata.indicador24}}"
+                                        class="bg-yellow-300 w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 25 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">25 - Del total de estudiantes de CD
+                                    contratados, cifras como Auxiliar Técnico de la Docencia</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador25"
+                                    value="{{predata.indicador25}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+                            <!-- fila 26 -->
+                            <tr>
+                                <td class="border border-black pl-1 w-11/12">26 - Del total de estudiantes de CD
+                                    contratados, cifras en cargos No Docentes</td>
+                                <td class="border border-black w-1/12">
+                                    <input type="number" 
+                                    required 
+                                    min="0" 
+                                    step="1" 
+                                    placeholder="0"
+                                    id="indicador26"
+                                    value="{{predata.indicador26}}"
+                                        class="w-40 text-end">
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+            </div>
+
+            <div class=" mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 mx-8">
+
+                <div class="flex flex-col">
+                    <label class="block text-base h-12 place-content-end font-medium">
+                        Confeccionado por:
+                    </label>
+                    <input type='text' 
+                    required 
+                    id="indicador28"
+                    value="{{predata.indicador28}}"
+                    placeholder=" Confeccionado por"
+                        class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                </div>
+                <div class="flex flex-col">
+                    <label class="block text-base h-12 place-content-end font-medium">
+                        Cargo:
+                    </label>
+                    <input type='text' 
+                    required 
+                    id="indicador29"
+                    placeholder="Cargo de quien lo Confeccionó"
+                        class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="password" class="block h-12 text-base place-content-end font-medium">
+                        Revisado:
+                    </label>
+                    <input type='text' 
+                    required 
+                    id="indicador30"
+                    placeholder="Revisado Por"
+                        class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="username" class="block text-base h-12 place-content-end font-medium">
+                        Cargo:
+                    </label>
+                    <input type='text' 
+                    required 
+                    id="indicador31"
+                    placeholder="Cargo de quien lo revisó"
+                        class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                </div>
+                <div class="flex flex-col col-span-1 sm:col-span-2">
+                    <label for="username" class="block text-base h-12 place-content-end font-medium">
+                        Observaciones:
+                    </label>
+                    <input type='text' 
+                    required 
+                    id="indicador27"
+                    placeholder="Observaciones:"
+                        class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                </div>
+
+
+            </div>
+
+            <div class="flex w-full justify-center mt-4">
+                <button
+                    class="bg-blue-600 hover:bg-blue-700 text-gray-200 font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out text-xl px-4"
+                    type="submit">Aceptar</button>
+            </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    const toggleButton = document.getElementById('toggleButton');
+    const inputsNumerics = document.querySelectorAll('input[type="number"]');
+
+    // ae2 new data
+    const indicador1 = document.getElementById('indicador1');
+    const indicador2 = document.getElementById('indicador2');
+    const indicador3 = document.getElementById('indicador3');
+    const indicador4 = document.getElementById('indicador4');
+    const indicador5 = document.getElementById('indicador5');
+    const indicador6 = document.getElementById('indicador6');
+    const indicador7 = document.getElementById('indicador7');
+    const indicador8 = document.getElementById('indicador8');
+    const indicador9 = document.getElementById('indicador9');
+    const indicador10 = document.getElementById('indicador10');
+    const indicador11 = document.getElementById('indicador11');
+    const indicador12 = document.getElementById('indicador12');
+    const indicador13 = document.getElementById('indicador13');
+    const indicador14 = document.getElementById('indicador14');
+    const indicador15 = document.getElementById('indicador15');
+    const indicador16 = document.getElementById('indicador16');
+    const indicador17 = document.getElementById('indicador17');
+    const indicador18 = document.getElementById('indicador18');
+    const indicador19 = document.getElementById('indicador19');
+    const indicador20 = document.getElementById('indicador20');
+    const indicador21 = document.getElementById('indicador21');
+    const indicador22 = document.getElementById('indicador22');
+    const indicador23 = document.getElementById('indicador23');
+    const indicador24 = document.getElementById('indicador24');
+    const indicador25 = document.getElementById('indicador25');
+    const indicador26 = document.getElementById('indicador26');
+    const indicador27 = document.getElementById('indicador27');
+    const indicador28 = document.getElementById('indicador28');
+    const indicador29 = document.getElementById('indicador29');
+    const indicador30 = document.getElementById('indicador30');
+    const indicador31 = document.getElementById('indicador31');
+    
+
+    const loading = document.getElementById('loading');
+
+    const genericModal = document.getElementById('genericModal');
+    const imgGenericModal = document.getElementById('imgGenericModal');
+    const messageGenericModal = document.getElementById('messageGenericModal');
+
+    let statusGenericModal = false;
+
+
+    const form = document.querySelector('form');
+
+    function logout(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al usuario al login
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+    inputsNumerics.forEach(input => {
+        input.addEventListener('input', function () {
+            const valor = this.value;
+            if (valor.includes('.')) {
+                this.value = Math.floor(Number(valor)) || "";
+            } else if (Number(valor) < 0) {
+                this.value = 0;
+            }
+        });
+    });
+
+    function showLoading() {
+        loading.classList.remove('hidden');
+        loading.classList.add('flex');
+
+    }
+
+    function hideLoading() {
+        loading.classList.add('hidden');
+        loading.classList.remove('flex');
+    }
+
+    function showGenericModal() {
+
+        if (statusGenericModal) {
+            messageGenericModal.innerText = 'Documeto Ae2 Actualizado';
+            imgGenericModal.src = '../../static/svgs/confirm.svg';
+        } else {
+            messageGenericModal.innerText = 'Documeto Ae2 No Actualizado';
+            imgGenericModal.src = '../../static/svgs/alert_danger.svg';
+        }
+        genericModal.classList.add('flex');
+        genericModal.classList.remove('hidden');
+    }
+
+    function hiddenGenericModal() {
+        genericModal.classList.add('hidden');
+        genericModal.classList.remove('flex');
+        messageGenericModal.innerText = '';
+        imgGenericModal.src = '';
+    }
+
+    toggleButton.addEventListener('click', logout);
+
+    async function updateDataAe2() {
+
+        showLoading();
+
+      const newAe2 = {
+        total_plantilla_aprobada: Number(indicador1.value),
+        total_plantilla_cubierta: Number(indicador2.value),
+        total_general_de_contrato: Number(indicador3.value),
+        total_contrato_p_det: Number(indicador4.value),
+        total_contrato_p_comp: Number(indicador5.value),
+        total_contrato_no_d: Number(indicador6.value),
+        contrato_no_doc_resp: Number(indicador7.value),
+        contrato_no_doc_resp_s: Number(indicador8.value),
+        periodo_prueba: Number(indicador9.value),
+        seren_aux: Number(indicador10.value),
+        labores_a: Number(indicador11.value),
+        jubilados: Number(indicador12.value),
+        otros: Number(indicador13.value),
+        contratos_no_d: Number(indicador14.value),
+        contratos_no_d_e: Number(indicador15.value),
+        eject_obra: Number(indicador16.value),
+        reserva_cientif: Number(indicador17.value),
+        recien_graduados: Number(indicador18.value),
+        reserva_d_p: Number(indicador19.value),
+        tecnico_m_prepa: Number(indicador20.value),
+        estu_contrd_d: Number(indicador21.value),
+        estu_cont_a: Number(indicador22.value),
+        estu_cont_n: Number(indicador23.value),
+
+        observaciones: indicador27.value,
+        confeccionado: indicador28.value,
+        c_cargo: indicador29.value,
+        revisado: indicador30.value,
+        r_cargo: indicador31.value,
+      }
+
+        try {
+            const response = await fetch("{% url 'ae2' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                body: JSON.stringify(newAe2),
+            });
+
+            response.json().then(data => {
+                console.log(data);
+
+                if (data.ok === true) {
+                    console.log("ae2 actualizado con exito");
+                    statusGenericModal = true;
+                    showGenericModal();
+                } else {
+                    console.log("ae2 no se actualizo");
+                    statusGenericModal = false;
+                    showGenericModal();
+                }
+            }
+            )
+        } catch (error) {
+            console.log("error inesperado");
+            statusGenericModal = false;
+            showGenericModal();
+        } finally {
+            hideLoading();
+        }
+
+
+    }
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        updateDataAe2();
+    })
+
+
+</script>
+
+
+{% endblock %}

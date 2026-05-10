@@ -1,0 +1,44 @@
+
+
+
+
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="flex flex-col justify-center m-auto p-8 mt-0 sm:mt-32 rounded-md border-2 border-black h-screen sm:h-auto w-screen sm:w-1/2">
+	<div>
+		<h1 class="text-2xl font-bold text-center">Recursos Humanos</h1>
+		<form method="post" class="space-y-6">
+			{% csrf_token %}
+			<div class="space-y-1 text-sm">
+				<label for="username" class="block dark:text-gray-600">Usuario</label>
+				<input type="text" name="username" id="username" required  placeholder="Usuario" class="w-full px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600">
+			</div>
+			<div class="space-y-1 text-sm">
+				<label for="email" class="block dark:text-gray-600">Correo</label>
+				<input type="email" name="email" id="email" required placeholder="Correo" class="w-full px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600">
+				
+			</div>
+			<div class="space-y-1 text-sm">
+				<label for="password" class="block dark:text-gray-600">Contraseña</label>
+				<input type="password" name="password" id="password" required placeholder="Contraseña" class="w-full px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600">
+				
+			</div>
+			<button type="submit" value="Login" class="block w-full p-3 text-center rounded-sm text-gray-50 bg-blue-700 hover:bg-blue-500 text-xl hover:text-black">Aceptar</button>
+		</form>
+
+		{% if error_message %}
+        <div class="mt-4 p-4 bg-red-100 text-red-600 border border-red-300 rounded">
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+		
+	</div>
+	</div>
+	
+</div>
+	
+{% endblock %}

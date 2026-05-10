@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<div id="userUpdateModal" class="fixed inset-0 z-50 items-center justify-center hidden">
+    <!-- Fondo opaco -->
+    <div onclick="hideModalUpdateUser()" class="fixed inset-0 bg-black/50 cursor-pointer"></div>
+
+    <!-- Contenido del modal -->
+    <div class="relative pb-2 pt-4 px-6 max-w-md w-full bg-white dark:bg-gray-800 bg-opacity-30 rounded-lg shadow-lg backdrop-blur-xl backdrop-filter">
+        <form id="form_update_user" class="flex flex-col">
+            <div class="flex flex-col gap-2">
+                <div class="mb-5">
+                    <label class="dark:text-white font-semibold mb-2" for="name">Nombre</label>
+                    <input class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal" 
+                        type="text" id="name" name="name" required placeholder="Nuevo Nombre">
+                </div>
+                <div class="mb-5">
+                    <label class="dark:text-white font-semibold mb-2" for="email">Correo</label>
+                    <input class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal" 
+                        type="email" id="email" name="email" required placeholder="Nuevo Correo">
+                </div>
+    
+                <div class="mb-5 hidden">
+                    <label class="dark:text-white font-semibold mb-2" for="email">Rol</label>
+                    <input class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal" 
+                        type="text" id="role" name="role" required placeholder="Rol">
+                </div>
+
+                <div class="mb-5">
+                      <label class="dark:text-white font-semibold mb-2" for="email">Rol</label>
+                      <select id="roles" class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal">
+                        <option class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal" value="user">User</option>
+                        <option class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal" value="admin">Admin</option>
+                    </select>
+                </div>
+    
+                <div class="mb-5">
+                    <label class="dark:text-white font-semibold mb-2" for="email">Contraseña</label>
+                    <input class="bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal" 
+                        type="password" id="password" name="password" required placeholder="Nueva Contraseña">
+                </div>
+                <div class="flex h-10 w-full items-center justify-center mb-5">
+                    <p id="mesagge_error_update_user" class="text-red-500 hidden">error</p>
+                </div>
+            </div>
+           
+            
+            <div class="flex w-full m-auto gap-2 justify-between">
+                <div class="flex w-1/2 items-end justify-end">
+                    <button onclick="hideModalUpdateUser()" class="bg-red-600 hover:bg-red-700 dark:text-gray-200 font-semibold py-2 rounded-lg shadow-md transition duration-300 ease-in-out mb-5 w-1/2" 
+                    type="button" >Cancelar</button>
+                </div>
+                <div class="flex w-1/2">
+                    <button id="buttonUpdateList" class="bg-blue-600 hover:bg-blue-700 dark:text-gray-200 font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out mb-5 w-1/2" 
+                    type="submit">Actualizar</button>
+                </div>
+                
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

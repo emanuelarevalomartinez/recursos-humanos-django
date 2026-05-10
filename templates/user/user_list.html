@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="w-screen h-screen flex">
+
+    <!-- modal delete user-->
+    {% include 'user/user_modal.html' %}
+    <!-- modal update user -->
+    {% include 'user/user_update_modal.html' %}
+
+
+    <div class="flex bg-gray-100"></div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center h-16 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="{% url 'admin_session' %}"
+                    class="flex rounded-md items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/newUser.svg' %}" alt="User Icon">
+                    Añadir Usuario
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-100 bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/users.svg' %}" alt="Users Icon">
+                    Usuarios
+                </a>
+                <a href="{% url 'admin_history' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+
+                <a href="{% url 'charge_file' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table_settings.svg' %}" alt="Table File Icon">
+                    Gestionar Datos
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+
+        <div class="flex items-center justify-between h-16 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+
+        <!-- content of list -->
+
+        <div class="p-4 h-5/6">
+
+            <div>
+                <h1 class=" text-2xl xl:text-3xl font-bold">Listado de Usuarios </h1>
+
+                <div class="flex flex-col mt-4">
+                    <div class=" overflow-x-auto">
+                        <div class="min-w-full inline-block align-middle">
+
+                            <div class="overflow-hidden">
+                                <table class=" min-w-full rounded-xl">
+                                    <thead>
+                                        <tr class="bg-gray-500 text-white">
+                                            <th scope="col"
+                                                class="p-5 text-left text-sm leading-6 font-semibold capitalize rounded-ss-xl">
+                                                #</th>
+                                            <th scope="col"
+                                                class="p-5 text-left text-sm leading-6 font-semibold capitalize">
+                                                Nombre de Usuario </th>
+                                            <th scope="col"
+                                                class="p-5 text-left text-sm leading-6 font-semibold capitalize">
+                                                Correo </th>
+                                            <th scope="col"
+                                                class="p-5 text-left text-sm leading-6 font-semibold capitalize">
+                                                Rol </th>
+                                            <th scope="col"
+                                                class="p-5 text-left text-sm leading-6 font-semibold capitalize rounded-tr-xl">
+                                                Acción </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-300 ">
+                                        {% for usuario in page_obj %}
+                                        <tr class="bg-white transition-all duration-500 hover:bg-gray-50 ">
+                                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 
+                                {% if forloop.last %}rounded-bl-xl{% endif %}">
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td
+                                                class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
+                                                {{ usuario.username }}</td>
+                                            <td
+                                                class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
+                                                {{ usuario.email }}</td>
+                                            <td
+                                                class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
+                                                {{ usuario.role }}</td>
+
+                                            <td class="p-5 
+                                                {% if forloop.last %}rounded-br-xl{% endif %}">
+                                                <div class="flex items-center gap-1">
+                                                    <button onclick="showModalEditUser('{{usuario.id}}')"
+                                                        class="p-2  rounded-full  group transition-all duration-500  flex item-center">
+                                                        <img class="h-6 w-6 mr-2"
+                                                            src="{% static 'svgs/users_edit.svg' %}"
+                                                            alt="UsersEdit Icon">
+                                                    </button>
+                                                    <form id={{usuario.id}} action="{% url 'delete_user' %}"
+                                                        method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="uuid" value="{{usuario.id}}">
+                                                        <button onclick="showModal('{{usuario.id}}')"
+                                                            class="p-2 rounded-full  group transition-all duration-500  flex item-center">
+                                                            <img class="h-6 w-6 mr-2"
+                                                                src="{% static 'svgs/users_delete.svg' %}"
+                                                                alt="UsersDelete Icon">
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        {% endfor %}
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--  pagination  -->
+            </div>
+            <div class="py-4">
+                {% include 'user/pagination.html' %}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+<script>
+    const modal = document.getElementById('deleteModal');
+    const modalUpdateUser = document.getElementById('userUpdateModal');
+    const closeModalButton = document.getElementById('closeModal');
+    const deleteUserButton = document.getElementById('confirmDelete');
+    const toggleButton = document.getElementById('toggleButton');
+
+    const usernameInput = document.getElementById('name');
+    const inputEmail = document.getElementById('email');
+    const inputPassword = document.getElementById('password');
+    const buttonUpdateList = document.getElementById('buttonUpdateList');
+    const form_update_user = document.getElementById('form_update_user');
+    const messageErrorUpdateUser = document.getElementById('mesagge_error_update_user');
+
+    form_update_user.addEventListener('submit', event => {
+        event.preventDefault();
+        console.log("hola");
+
+    })
+
+
+    const form = document.getElementsByTagName("form");
+    let userIdToDelete = null;
+
+    for (const f of form) {
+        f.addEventListener('submit', event => {
+            event.preventDefault();
+        })
+    }
+
+    function logout(event) {
+        event.preventDefault();
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+
+    // Mostrar el modal
+    function showModal(id) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        userIdToDelete = id;
+
+    }
+
+    async function showModalEditUser(id) {
+        // URL de la API para obtener datos del usuario
+        userIdToDelete = id;
+        console.log(userIdToDelete);
+
+        const url = `/get_user/${id}/`;
+
+        try {
+            // Hacer la solicitud GET al backend
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error al obtener los datos del usuario.');
+            }
+            const data = await response.json();
+            document.getElementById('name').value = data.username;
+            document.getElementById('email').value = data.email;
+            document.getElementById('role').value = data.role;
+
+            const roleSelect = document.getElementById('roles');
+            if (data.role === 'admin') {
+                roleSelect.value = 'admin';
+            } else {
+                roleSelect.value = 'user';
+            }
+
+            // Mostrar el modal
+            const modalUpdateUser = document.getElementById('userUpdateModal');
+            modalUpdateUser.classList.remove('hidden');
+            modalUpdateUser.classList.add('flex');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Hubo un error al cargar los datos del usuario. Inténtalo nuevamente.');
+        }
+    }
+
+
+    // Ocultar el modal
+    function hideModal() {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function hideModalUpdateUser() {
+        modalUpdateUser.classList.add('hidden');
+        modalUpdateUser.classList.remove('flex');
+    }
+
+    function showError(message) {
+        messageErrorUpdateUser.textContent = message;
+        messageErrorUpdateUser.classList.remove('hidden');
+        setTimeout(() => {
+            messageErrorUpdateUser.classList.add('hidden');
+        }, 3000);
+    }
+
+    function validateDataUpdateUser() {
+        let isValid = true;
+
+
+        const usernameLength = usernameInput.value.length;
+        const userEmailLength = inputEmail.value.length;
+        const userPasswordLength = inputPassword.value.length;
+
+        console.log(userPasswordLength);
+        
+
+
+        // Validar Nombre
+        const usernameRegex = /^[a-zA-Z\s]+$/;
+        if (!usernameRegex.test(usernameInput.value)) {
+            isValid = false;
+            if(usernameLength > 0){
+                showError('Nombre solo con letras y espacios.');
+            }
+        }
+
+        const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
+        if (!emailRegex.test(inputEmail.value)) {
+            isValid = false;
+            if ( userEmailLength > 0){
+                showError('El correo poseé un formato no válido.');
+            }
+        }
+
+        // Validar Contraseña
+        const passwordRegex = /(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/;
+        if (!passwordRegex.test(inputPassword.value)) {
+            isValid = false;
+            if(userPasswordLength > 0){
+                showError('La nueva contraseña no cumple los parametros.');
+            }
+        }
+        return isValid;
+    }
+
+    async function updateUser() {
+        let username = usernameInput.value;
+        let email = inputEmail.value;
+        let role = document.getElementById('roles').value;
+        let password = inputPassword.value;
+
+        const newUser = {
+            id: userIdToDelete,
+            username: username,
+            email: email,
+            role: role,
+            password: password,
+        }
+
+        try {
+            const response = await fetch("{% url 'update_user' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'aplication/json',
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                body: JSON.stringify(newUser),
+            });
+
+            response.json().then(data => {
+                console.log(data);
+                if (data.ok === true) {
+                    console.log("correcto");
+                    hideModalUpdateUser()
+                    window.location.href = "{% url 'user_list' %}"
+                } else {
+                    console.log("error");
+
+                }
+            }
+            )
+
+
+        } catch (error) {
+            showError('Error inesperado');
+        }
+
+
+    }
+
+
+    buttonUpdateList.addEventListener('click', (event) => {
+        if(validateDataUpdateUser()){
+            updateUser();
+        }
+       
+    })
+    toggleButton.addEventListener('click', logout)
+    closeModalButton.addEventListener('click', hideModal);
+    deleteUserButton.addEventListener('click', () => {
+        const f = document.getElementById(userIdToDelete);
+        console.log(userIdToDelete)
+        f.submit();
+    });
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            hideModal();
+        }
+    });
+
+
+
+</script>
+{% endblock %}

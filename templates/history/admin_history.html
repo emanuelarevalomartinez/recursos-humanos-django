@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'apexcharts_library/apexcharts.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="w-screen h-screen flex">
+
+
+    <!-- modal delete user-->
+    {% include 'history/history_modal.html' %}
+
+    <!-- modal generic for confirm data load -->
+
+    {% include 'loading/modal_generic.html' %}
+
+    <div class="flex bg-gray-100"></div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center py-5 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="{% url 'admin_session' %}"
+                    class="flex rounded-md items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/newUser.svg' %}" alt="User Icon">
+                    Añadir Usuario
+                </a>
+                <a href="{% url 'user_list' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/users.svg' %}" alt="Users Icon">
+                    Usuarios
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-100 bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+
+                <a href="{% url 'charge_file' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table_settings.svg' %}" alt="Table File Icon">
+                    Gestionar Datos
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+        <div class="flex items-center justify-between py-5 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+        <div class="p-4">
+
+            <!--  history content  -->
+
+            <h1 class=" text-2xl xl:text-3xl font-bold"> Historial </h1>
+            <div class="flex">
+                <button onclick="showHistoryModal()"
+                    class="bg-blue-600 hover:bg-blue-700 text-gray-200 font-semibold px-4 mt-4 py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+                    type="submit">Ver Gafica</button>
+            </div>
+
+            <div class="flex mx-4 mt-4">
+
+                <ol class="relative flex w-full flex-col border-s border-gray-700">
+                    {% for historial in page_obj %}
+                    <li class="ms-6 p-4 w-full">
+                        <span class="absolute flex items-center justify-center w-8 h-8 rounded-full -start-3">
+                            <img class="rounded-full shadow-lg" src="{% static 'svgs/table_2.svg' %}"
+                                alt="User_History Icon" />
+                        </span>
+                        <div
+                            class="items-center justify-between px-4 py-3 border rounded-lg shadow-sm sm:flex bg-gray-700 border-gray-600">
+                            <div class="text-lg font-normal lex text-white"> {{ historial.type_document }} </div>
+                            <time class="mb-1 font-normal text-white text-md sm:order-last sm:mb-0">{{historial.date|date:"d/m/Y"}}</time>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+
+            <div class="py-4">
+                {% include 'user/pagination.html' %}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'apexcharts_library/apexcharts.js' %}"></script>
+
+<script>
+
+    const form = document.querySelector('form');
+
+    const toggleButton = document.getElementById('toggleButton');
+
+    const historyModal = document.getElementById('historyModal');
+
+    const genericModal = document.getElementById('genericModal');
+    const imgGenericModal = document.getElementById('imgGenericModal');
+    const messageGenericModal = document.getElementById('messageGenericModal');
+
+    const selectColumnsData = document.getElementById('select_ColumnsData');
+    const selectAe2Ae3 = document.getElementById('select_ae2_ae3');
+    const since = document.getElementById('since');
+    const until = document.getElementById('until');
+
+    let statusGenericModal = false;
+
+    const optionsByType = {
+        ae2: [
+            { value: 'total_platilla_aprobada', text: 'Total Plantilla Aprobada' },
+            { value: 'total_platilla_cubierta', text: 'Total Plantilla Cubierta' },
+            { value: 'total_general_contratos', text: 'Total General de Contratos' },
+            { value: 'total_contrato_P_det', text: 'Total de Contratos de Profesores por tiempo determinado' },
+            { value: 'total_contratos_P_comp', text: 'Total Profesores a contratar tiempo completo' },
+            { value: 'total_contrato_no_d', text: 'Total de contratos no docentes' },
+            { value: 'contrato_no_doc_resp', text: 'Contratos no docentes con resplando de plazas' },
+            { value: 'contrato_no_doc_resp_s', text: 'Contratos no docentes por sustitución' },
+            { value: 'periodo_prueba', text: 'Periodo de Prueba' },
+            { value: 'seren_aux', text: 'Serenos y auxiliares de limpiesa' },
+            { value: 'labores_a', text: 'Labores Agrícolas' },
+            { value: 'jubilados', text: 'Jubilados' },
+            { value: 'otros', text: 'Otros' },
+            { value: 'contratos_no_d', text: 'Contratos no docentes sin respaldo de plazas' },
+            { value: 'contratos_no_d_e', text: 'Contratos no docentes sin resplando de plazas' },
+            { value: 'eject_obra', text: 'Ejecución de Obra' },
+            { value: 'reserva_cientif', text: 'Reserva Científica en preparación' },
+            { value: 'recien_graduados', text: 'Recien Graduados en preparación' },
+            { value: 'reserva_d_p', text: 'Reserva Dirección Provincial de trabajo' },
+            { value: 'tecnico_m_prepa', text: 'Técnicos Medio en Preparación' },
+            { value: 'estu_contr_d', text: 'Total de estudiantes de la universidad de CD contratados por tiempo determinado' },
+            { value: 'estu_cont_a', text: 'Del total de estidiantes de CD cifras por auxiliares Técnicos de la Docencia' },
+            { value: 'estu_cont_n', text: 'Del total de estidiantes de CD cifras en cargos no docentes' },
+        ],
+        ae3: [
+            { value: 'total_de_cuadros', text: 'Total De Cuadros' },
+            { value: 'cuadros_docente', text: 'Cuadros Docentes' },
+            { value: 'cuadros_admin', text: 'Cuadros Administrativos' },
+            { value: 'cuadros_invest', text: 'Cuadros Investigación' },
+            { value: 'otros_cuadros', text: 'Otros Cuadros' },
+            { value: 'total_tecnicos', text: 'Total de técnicos' },
+            { value: 'prof_tiempo_compl', text: 'Profesores a tiempo completo' },
+            { value: 'asesores_metodol', text: 'Asesores Metodológicos' },
+            { value: 'investigadores', text: 'Investigadores' },
+            { value: 'otros_tecnicos', text: 'Otros Técnicos' },
+            { value: 'administrativos', text: 'Administrativos' },
+            { value: 'servicio', text: 'Servicio' },
+            { value: 'operarios', text: 'Operarios' },
+            { value: 'total', text: 'Total' },
+            { value: 'profe_tiempo_pars', text: 'Profesores a tiempo Parcial' },
+
+            { value: 'total_de_cuadros_fem', text: 'Total de cuadros Femeninos' },
+            { value: 'total_jovenes_t', text: 'Total de jovenes Trabajando' },
+            { value: 'total_jovenes_t_fem', text: 'Total de jovenes trabajando femenino' },
+            { value: 'profe_titular', text: 'Profesor titular' },
+            { value: 'profe_aux', text: 'Profesor auxiliar' },
+            { value: 'asistente', text: 'Asistente' },
+            { value: 'instructor', text: 'Instructor' },
+
+            { value: 'cuadros_docente_fem', text: 'Cuadros docentes femenino' },
+            { value: 'cuadros_docente_jovenes_t', text: 'Cuadros docente jovenes trabajando' },
+            { value: 'cuadros_docente_jovenes_t_fem', text: 'Cuadros docente jovenes trabajando femenino' },
+            { value: 'cuadros_docente_profe_titular', text: 'Cuadros docentes profesores titulares' },
+            { value: 'cuadros_docente_profe_aux', text: 'Cuadros docentes profesores auxiliares' },
+            { value: 'cuadros_docente_asistente', text: 'Cuadros docentes asistentes' },
+            { value: 'cuadros_docente_instructor', text: 'Cuadros docentes instructores' },
+
+            { value: 'total_tecnicos_fem', text: 'Total de técnicos femeninos' },
+            { value: 'total_tecnicos_jovenes_t', text: 'Total de técnicos jovenes trabajando' },
+            { value: 'total_tecnicos_jovenes_t_fem', text: 'Total de técnicos jovenes trabajando femenino' },
+            { value: 'total_tecnicos_profe_titular', text: 'Total de técnicos profesor titular' },
+            { value: 'total_tecnicos_profe_aux', text: 'Total de técnicos profesor auxiliar' },
+            { value: 'total_tecnicos_asistente', text: 'Total de técnicos asistentes' },
+            { value: 'total_tecnicos_instructor', text: 'Total de técnicos instructores' },
+        ],
+        '': [
+            { value: '', text: '' }
+        ]
+    };
+
+    selectAe2Ae3.addEventListener('change', function () {
+        const selectedType = selectAe2Ae3.value;
+        const options = optionsByType[selectedType] || [];
+
+        selectColumnsData.innerHTML = '';
+
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option.value;
+            opt.textContent = option.text;
+            opt.className = 'bg-white border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal';
+            selectColumnsData.appendChild(opt);
+        });
+    });
+
+    function logout(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al usuario al login
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+    function showGenericModal() {
+
+        if (statusGenericModal) {
+            messageGenericModal.innerText = 'Correcto';
+            imgGenericModal.src = '../../static/svgs/confirm.svg';
+        } else {
+            messageGenericModal.innerText = 'No hay datos disponibles';
+            imgGenericModal.src = '../../static/svgs/alert_danger.svg';
+        }
+        genericModal.classList.add('flex');
+        genericModal.classList.remove('hidden');
+    }
+
+    function hiddenGenericModal() {
+        genericModal.classList.add('hidden');
+        genericModal.classList.remove('flex');
+        messageGenericModal.innerText = '';
+        imgGenericModal.src = '';
+    }
+
+    function showHistoryModal() {
+        historyModal.classList.remove('hidden');
+        historyModal.classList.add('flex');
+        // updateChartData();
+
+    }
+
+    function hideHistoryModal() {
+        selectAe2Ae3.value = '';
+        selectColumnsData.innerHTML = '';
+
+        historyModal.classList.add('hidden');
+        historyModal.classList.remove('flex');
+        clearChartData();
+    }
+
+    let chartConfig = {
+        series: [{ name: '', data: [], }],
+        xAxis: { categories: [], title: { text: "" } },
+        yAxis: { title: { text: "", }, min: 0, max: 0, tickAmount: 0, },
+        groups: [],
+    };
+
+    function clearChartData() {
+        chartConfig.series[0].name = ''
+        chartConfig.series[0].data = [];
+        chartConfig.xAxis.categories = [];
+        chartConfig.xAxis.title.text = "";
+        chartConfig.yAxis.min = 0;
+        chartConfig.yAxis.max = 0;
+        chartConfig.yAxis.tickAmount = 0;
+        chartConfig.groups = [];
+
+        executeChartAction();
+    }
+
+
+    async function updateChartData() {
+
+        clearChartData();
+
+
+        let graphicFetchData = {
+            typeTable: selectAe2Ae3.value,
+            colum: select_ColumnsData.value,
+            sinceData: since.value,
+            untilData: until.value,
+        }
+
+        try {
+            const response = await fetch("{% url 'graphics' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'aplication/json',
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                body: JSON.stringify(graphicFetchData),
+            });
+
+            response.json().then(data => {
+                console.log(data);
+
+                if (data.ok === true) {
+                    console.log("correcta informacion del grafico");
+
+                    let month = data.data_g.month;
+                    let group = data.data_g.obj_anno_cols;
+                    let values = data.data_g.values;
+
+                    let maxValue = values[0];
+
+                    for (let index = 1; index < values.length; index++) {
+                        let init = values[0];
+                        if (values[index] > maxValue) {
+                            maxValue = values[index];
+                        }
+
+                    }
+
+                    setTimeout(() => {
+                        // chartConfig.series[0].name = "eee";
+                        chartConfig.series[0].data = values;
+                        chartConfig.xAxis.categories = month;
+                        chartConfig.xAxis.title.text = "Meses";
+                        chartConfig.yAxis.min = 0;
+                        chartConfig.yAxis.max = maxValue;
+                        chartConfig.yAxis.tickAmount = 10;
+                        chartConfig.groups = group;
+
+                        executeChartAction();
+                    }, 200);
+
+                } else {
+                    console.log("no se mostro la informacion del grafico");
+                    statusGenericModal = false;
+                    showGenericModal();
+                }
+            }
+            )
+        } catch (error) {
+            console.log("error inesperado");
+            statusGenericModal = false;
+            showGenericModal();
+        }
+
+
+
+
+        // setTimeout(() => {
+        //    // chartConfig.series[0].name = "eee";
+        //     chartConfig.series[0].data = [50, 60, 70, 80, 90, 100, 60, 50, 40, 70, 80, 60];
+        //     chartConfig.xAxis.categories = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+        //     chartConfig.xAxis.title.text = "Meses";
+        //     chartConfig.yAxis.min = 0;
+        //     chartConfig.yAxis.max = 100;
+        //     chartConfig.yAxis.tickAmount = 10;
+        //     chartConfig.groups = [
+        //         { title: '2019', cols: 4 },
+        //         { title: '2020', cols: 2 },
+        //     ];
+
+        //     executeChartAction();
+        // }, 200);
+    }
+
+
+
+    function executeChartAction() {
+        chart.updateOptions({
+            series: [{ data: [] }],
+            xaxis: { categories: [] },
+            yaxis: { min: 0, max: 0, tickAmount: 0 },
+        });
+
+        setTimeout(() => {
+            chart.updateOptions({
+                series: chartConfig.series,
+                xaxis: {
+                    categories: chartConfig.xAxis.categories,
+                    title: {
+                        text: chartConfig.xAxis.title.text,
+                    },
+                    group: {
+                        groups: chartConfig.groups,
+                    },
+                },
+                yaxis: {
+                    min: chartConfig.yAxis.min,
+                    max: chartConfig.yAxis.max,
+                    tickAmount: chartConfig.yAxis.tickAmount,
+                    labels: {
+                        style: {
+                            colors: '#ffffff',
+                            fontFamily: 'Arial, sans-serif',
+                            fontWeight: 'bold',
+                        },
+                    },
+                },
+            });
+        }, 100);
+    }
+
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        updateChartData();
+    });
+    toggleButton.addEventListener('click', logout);
+
+
+
+    // Objeto que engloba todas las configuraciones
+
+
+    // parametros de la grafica
+    let options = {
+        series: chartConfig.series, // datos en el eje x
+        chart: {
+            type: 'bar',
+            height: '90%', // tamaño de la grafica
+            animations: {
+                enabled: true,
+                speed: 300,
+                easing: 'easeinout',
+            },
+            toolbar: {
+                show: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                horizontal: false,
+                columnWidth: '70%', // ancho de las barras
+                endingShape: 'rounded',
+                dataLabels: {
+                    position: 'top',
+                },
+            },
+        },
+        dataLabels: {
+            enabled: true,
+            offsetY: -20,
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: chartConfig.xAxis.categories, // valores del eje y
+            labels: {
+                style: {
+                    colors: '#ffffff',
+                    fontFamily: 'Arial, sans-serif',
+                    fontWeight: 'bold',
+                }
+            },
+            title: {
+                text: chartConfig.xAxis.title.text, // Título del eje X
+                style: {
+                    color: '#60a5fa',
+                    fontSize: '14px',
+                }
+            },
+            group: {
+                style: {
+                    colors: '#60a5fa',
+                    fontSize: '14px',
+                },
+                groups: chartConfig.groups, // intevalo de los años
+            },
+        },
+        yaxis: {
+            min: chartConfig.yAxis.min, // Valor mínimo eye y
+            max: chartConfig.yAxis.max, // Valor máximo eje y
+            tickAmount: chartConfig.yAxis.tickAmount, // separaciones
+            labels: {
+                style: {
+                    colors: '#ffffff',
+                    fontFamily: 'Arial, sans-serif',
+                    fontWeight: 'bold',
+                }
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            theme: 'dark',
+        },
+    };
+
+    // Renderizar la gráfica
+    let chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+
+</script>
+
+
+
+{% endblock %}

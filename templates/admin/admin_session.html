@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="w-screen h-screen flex">
+    <div class="flex bg-gray-100"></div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center h-16 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="#" class="flex rounded-md items-center px-4 py-2 text-gray-100 bg-gray-700">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/newUser.svg' %}" alt="User Icon">
+                    Añadir Usuario
+                </a>
+                <a href="{% url 'user_list' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/users.svg' %}" alt="Users Icon">
+                    Usuarios
+                </a>
+                <a href="{% url 'admin_history' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+
+                <a href="{% url 'charge_file' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table_settings.svg' %}" alt="Table File Icon">
+                    Gestionar Datos
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+        <div class="flex items-center justify-between h-16 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+        <div class="p-4">
+
+            <!--  view new user  -->
+
+            <div class="my-4">
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 items-center p-8 mx-auto max-w-4xl  bg-gray-700 rounded-md text-[#333] font-[sans-serif] h-[75vh]">
+
+
+                    <h1 class=" text-2xl xl:text-3xl text-white font-bold text-center">Nuevo Usuario</h1>
+                    <form class="ml-auo space-y-4" method="post">
+                        {% csrf_token %}
+                        <div class="mb-5 text-white">
+                            <label for="username" class=" block text-base font-medium">
+                                Nombre
+                            </label>
+                            <input type='text' id="username" name="username" required placeholder='Nombre Completo'
+                                class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                        </div>
+                        <div class="mb-5 text-white">
+                            <label for="email" class="mb-3 block text-base font-medium"></label>
+                            Correo
+                            </label>
+                            <input type='email' id="email" name="email" required placeholder='Dirección de correo'
+                                class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                        </div>
+                        <div class="mb-5 text-white">
+                            <label for="password" class="mb-3 block text-base font-medium"></label>
+                            Contraseña
+                            </label>
+                            <input type='password' id="password" name="password" required
+                                placeholder='Contraseña personal'
+                                class="w-full rounded-md py-2.5 px-4 border text-black text-sm outline-[#007bff]" />
+                        </div>
+                        <button type='submit' id="register"
+                            class="text-slate-700 bg-[#7cacdf] font-semibold rounded-md text-sm px-4 py-2.5 w-full">Registrar
+                        </button>
+
+
+                    </form>
+                    <div class="col-span-1 sm:col-span-2 h-10">
+                        <p id="error-message" class="text-red-500 text-sm hidden text-center">Mensaje de error</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script>
+
+    const form = document.querySelector('form');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('error-message');
+    const toggleButton = document.getElementById('toggleButton');
+
+    function logout(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al usuario al login
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.remove('hidden');
+        setTimeout(() => {
+            errorMessage.classList.add('hidden');
+        }, 3000);
+    }
+
+    function showSuccessful(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.remove('hidden');
+        errorMessage.classList.remove('text-red-500');
+        errorMessage.classList.add('text-white');
+        setTimeout(() => {
+            errorMessage.classList.remove('text-white');
+            errorMessage.classList.add('text-red-400');
+            errorMessage.classList.add('hidden');
+        }, 3000);
+    }
+
+    function validateData() {
+        let isValid = true;
+
+
+        // Validar Nombre
+        const usernameRegex = /^[a-zA-Z\s]+$/;
+        if (!usernameRegex.test(usernameInput.value)) {
+            isValid = false;
+            showError('Nombre solo con letras y espacios.');
+        }
+
+        // Validar Email
+        // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // expresion email original
+        //  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; segun w3.org
+        const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
+        if (!emailRegex.test(emailInput.value)) {
+            isValid = false;
+            showError('El correo poseé un formato no válido.');
+        }
+
+        // Validar Contraseña
+        const passwordRegex = /(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/;
+        if (!passwordRegex.test(passwordInput.value)) {
+            isValid = false;
+            showError('La contraseña debe poseer 8 caracteres con mayúscula, minúscula, número y caractér especial.');
+        }
+        return isValid;
+    }
+
+    async function createNewUser() {
+        let name = usernameInput.value;
+        let email = emailInput.value;
+        let password = passwordInput.value;
+
+        let user = {
+            username: name,
+            email: email,
+            password: password
+        }
+        try {
+            const response = await fetch("{% url 'admin_session' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                body: JSON.stringify(user),
+            });
+
+            response.json().then(data => {
+
+                if (data.ok === true) {
+                    usernameInput.value = "";
+                    emailInput.value = "";
+                    passwordInput.value = "";
+                    showSuccessful("Usuario creado con exito");
+                } else {
+                    showError("Nombre de usuario o email ya existen");
+                }
+            }
+            )
+        } catch (error) {
+            showError('Error inesperado');
+        }
+
+    }
+
+    toggleButton.addEventListener('click', logout);
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        if (validateData()) {
+            createNewUser();
+        }
+
+    })
+
+
+</script>
+
+
+
+{% endblock %}

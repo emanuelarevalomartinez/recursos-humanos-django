@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="w-screen h-screen flex">
+
+    <div class="flex bg-gray-100"></div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center h-16 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-100 bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/user_history.svg' %}" alt="Historic Icon">
+                    Inicio
+                </a>
+                <a href="{% url 'user_history' %}" class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+
+                <a href="{% url 'ae2' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table.svg' %}" alt="Table Icon">
+                    AE2
+                </a>
+
+                <a href="{% url 'ae3' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table.svg' %}" alt="Table Icon">
+                    AE3
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+        <div class="flex items-center justify-between py-5 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+        <div class="p-4">
+          
+    </div>
+
+     <!--  history content  -->
+    <div class="p-4">
+     <div class="flex flex-col justify-center items-center p-8 mx-auto max-w-4xl  bg-gray-700 rounded-md text-[#333] font-[sans-serif] h-[75vh]">
+        <p class="text-2xl xl:text-3xl text-white font-bold"> Bienvenido </p>
+     </div>
+   
+      <!-- section -->
+   
+    </div>
+</div>
+
+<script>
+
+    const toggleButton = document.getElementById('toggleButton');
+
+    function logout(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al usuario al login
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+    toggleButton.addEventListener('click', logout);
+
+
+   
+
+</script>
+
+
+{% endblock %}

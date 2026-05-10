@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="w-screen h-screen flex">
+
+    <!-- loading -->
+
+    {% include 'loading/loading.html' %}
+
+    <!-- modal generic for confirm data load -->
+
+    {% include 'loading/modal_generic.html' %}
+
+    <div class="flex bg-gray-100"></div>
+
+    <!-- sidebar -->
+    <div class="hidden md:flex flex-col w-64 bg-[#080710]">
+        <div class="flex items-center justify-center h-16 bg-gray-900">
+            <span class="text-white font-bold uppercase">Panel</span>
+        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 bg-gray-800">
+                <a href="{% url 'admin_session' %}"
+                    class="flex rounded-md items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/newUser.svg' %}" alt="User Icon">
+                    Añadir Usuario
+                </a>
+                <a href="{% url 'user_list' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/users.svg' %}" alt="Users Icon">
+                    Usuarios
+                </a>
+                <a href="{% url 'admin_history' %}"
+                    class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/historic.svg' %}" alt="Historic Icon">
+                    Historial
+                </a>
+
+                <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-100 bg-gray-700 rounded-md">
+                    <img class="h-6 w-6 mr-2" src="{% static 'svgs/table_settings.svg' %}" alt="Table File Icon">
+                    Gestionar Datos
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-y-auto bg-[#b3bcbc]">
+        <div class="flex items-center justify-between h-16 bg-gray-800 border-b border-gray-200">
+            <div class="flex items-center px-4">
+                <button class="flex md:hidden bg-white focus:outline-none focus:text-gray-700">
+                    <img class="h-6 w-6" src="{% static 'svgs/menu.svg' %}" alt="Menu Icon">
+                </button>
+                <p class="uppercase font-bold ml-2 md:ml-0 text-white">Recursos Humanos</p>
+            </div>
+
+            <div class="flex items-center pr-4 cursor-pointer" id="toggleButton">
+                <img class="h-6 w-6 mr-2 bg-white" src="{% static 'svgs/logout.svg' %}" alt="Logout Icon">
+            </div>
+        </div>
+        <div class="p-4">
+
+            <!--  view manage data  -->
+
+            <h1 class=" text-2xl xl:text-3xl font-bold"> Gestionar Datos </h1>
+
+            <div class="flex flex-col w-full mt-8">
+                <div class="flex flex-col">
+                    <form id="form_import_data" class="flex flex-col text-white rounded-md p-8 bg-gray-700"
+                        action="{% url 'manage_data' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="flex text-md flex-col w-3/4 m-auto">
+                            <label for="filename"> Nombre del Archivo </label>
+                            <input
+                                class="bg-white text-black border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 py-2 px-4 block w-full appearance-none leading-normal"
+                                type="text" id="filename" name='filename' placeholder="Introduzca el nombre del archivo"
+                                required>
+                            <label for="file"> Archivo</label>
+                            <input
+                                class="block w-full text-lg border rounded-lg cursor-pointer text-blue-400 focus:outline-none bg-gray-500 border-gray-600 dark:placeholder-gray-400"
+                                id="file" name="file" type="file" required>
+                            <p class="mt-1 text-md" id="file_input_help">
+                                Solo se admiten archivos .xls y
+                                .xlsx
+                            </p>
+                        </div>
+
+                        <div
+                            class="flex bg-blue-600 mt-8 text-white text-base px-5 py-3 outline-none rounded w-max cursor-pointer mx-auto font-[sans-serif]">
+                            <img class="h-6 w-6 mr-2" src="{% static 'svgs/download_cloud.svg' %}"
+                                    alt="Download Cloud Incon">
+                            <button type="submit">Importar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <hr class="my-10 border border-black">
+
+                <div class="flex flex-col justify-center bg-gray-700 p-8 rounded-md text-md">
+                    <form id="form_load_data" action="" method="post">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="flex bg-blue-600 text-white text-base px-5 py-3 outline-none rounded w-max cursor-pointer mx-auto font-[sans-serif]">
+                            <div class="flex items-center cursor-pointer" id="toggleButton">
+                                <img class="h-6 w-6 mr-2" src="{% static 'svgs/load_file.svg' %}"
+                                    alt="Load File Incon">
+                            </div>
+                            Cargar Datos
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script>
+
+    const toggleButton = document.getElementById('toggleButton');
+
+    const formImportData = document.getElementById('form_import_data');
+    const formLoadtData = document.getElementById('form_load_data');
+    const fileNameInput = document.getElementById('filename');
+    const fileInput = document.getElementById('file');
+
+    const loading = document.getElementById('loading');
+
+    const genericModal = document.getElementById('genericModal');
+    const imgGenericModal = document.getElementById('imgGenericModal');
+    const messageGenericModal = document.getElementById('messageGenericModal');
+    
+    let fileLoaded = true;
+    let correctTypeOfDataFile = true;
+    let notFoundFile = true;
+
+    function logout(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado
+        fetch("{% url 'logout' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al usuario al login
+                }
+            })
+            .catch(error => console.error('Error al intentar cerrar sesión:', error));
+    }
+
+    function showLoading() {
+        loading.classList.remove('hidden');
+        loading.classList.add('flex');
+
+    }
+
+    function hideLoading() {
+        loading.classList.add('hidden');
+        loading.classList.remove('flex');
+    }
+
+    function validateTypeFile() {
+        return true;
+    }
+
+    function showGenericModal(type, data = {}) {
+        let message = '';
+        let icon = '../../static/svgs/alert_danger.svg';
+
+        if (type === 'importDocumentData') {
+            if (data.ok) {
+                message = 'Archivo Cargado';
+                icon = '../../static/svgs/confirm.svg';
+            } else {
+                message = 'Archivo No Cargado';
+                icon = '../../static/svgs/alert_danger.svg';
+            }
+        } else if (type === 'formImportData') {
+            if (!data.validFileType) {
+                icon = '../../static/svgs/alert_danger.svg';
+                message = 'El archivo no es de tipo XLS o XLSX';
+            } else if (data.ok) {
+                message = 'Archivo Importado';
+                icon = '../../static/svgs/confirm.svg';
+            } else {
+                message = 'Archivo No Importado';
+                icon = '../../static/svgs/alert_danger.svg';
+            }
+        }
+
+        messageGenericModal.innerText = message;
+        imgGenericModal.src = icon;
+        genericModal.classList.add('flex');
+        genericModal.classList.remove('hidden');
+    }
+
+    function hiddenGenericModal() {
+        genericModal.classList.add('hidden');
+        genericModal.classList.remove('flex');
+        messageGenericModal.innerText = '';
+        imgGenericModal.src = '';
+    }
+
+
+
+    async function importDocumentData() {
+        showLoading();
+        try {
+            const response = await fetch("{% url 'charge_file' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+            });
+
+            response.json().then(data => {
+                console.log(data);
+                if (data.ok === true) {
+                    console.log("hecho");
+                    showGenericModal('importDocumentData', data);
+                } else {
+                    console.log("eerror else");
+                    showGenericModal('importDocumentData', { ok: false });
+                }
+            }
+            )
+        } catch (error) {
+            console.log("error inesperado");
+            showGenericModal('importDocumentData', { ok: false });
+        } finally {
+            hideLoading();
+        }
+    }
+
+    formImportData.addEventListener('submit', async event => {
+        event.preventDefault();
+        const file = fileInput.files[0];
+        const allowedExtensions = /(\.xls|\.xlsx)$/i;
+
+
+        if (!allowedExtensions.exec(file.name)) {
+            showGenericModal('formImportData', { validFileType: false });
+            fileInput.value = '';
+        }
+        else {
+            showLoading();
+            const formData = new FormData();
+            formData.append('filename', fileNameInput.value);
+            formData.append('file', file);
+
+            try {
+                const response = await fetch("{% url 'manage_data' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{csrf_token}}',
+                    },
+                    body: formData,
+                });
+
+                response.json().then(data => {
+                    console.log(data);
+
+                    if (data.ok === true) {
+                        console.log("archivo cargado con exito");
+                        showGenericModal('formImportData', { validFileType: true, ...data });
+
+                    } else {
+                        console.log("usuario no se cargo");
+                        showGenericModal('formImportData', { validFileType: true, ok: false });
+                    }
+                }
+                )
+            } catch (error) {
+                console.log("error inesperado");
+                showGenericModal('formImportData', { validFileType: true, ok: false });
+
+            } finally {
+                hideLoading();
+                fileNameInput.value = '';
+                fileInput.value = '';
+            }
+        }
+    })
+
+    formLoadtData.addEventListener('submit', event => {
+        event.preventDefault();
+        importDocumentData();
+    })
+
+    toggleButton.addEventListener('click', logout);
+
+
+</script>
+
+{% endblock %}
