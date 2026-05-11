@@ -42,6 +42,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Uploads
+# folders for *.xlsx outpus
 media/uploads/*
 !media/uploads/.gitkeep
+static/informes/*
+!static/informes/.gitkeep

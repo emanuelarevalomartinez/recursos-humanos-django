@@ -43,45 +43,45 @@ The platform was also developed with coordination and technical collaboration wi
 
 # ✨ Main Features
 
-* 🔐 Session-based authentication system
+- 🔐 Session-based authentication system
 
-* 👤 User and administrator role management
+- 👤 User and administrator role management
 
-* 📄 Upload and processing of `.xlsx` files
+- 📄 Upload and processing of `.xlsx` files
 
-* 📊 AE2 and AE3 institutional report generation
+- 📊 AE2 and AE3 institutional report generation
 
-* 📈 Statistical chart visualization with ApexCharts
+- 📈 Statistical chart visualization with ApexCharts
 
-* 🕓 Historical operation tracking with pagination
+- 🕓 Historical operation tracking with pagination
 
-* 🧮 Excel data processing using Pandas and NumPy
+- 🧮 Excel data processing using Pandas and NumPy
 
-* 📑 Automated spreadsheet generation with OpenPyXL
+- 📑 Automated spreadsheet generation with OpenPyXL
 
-* 🎨 TailwindCSS integration using django-tailwind + npm
+- 🎨 TailwindCSS integration using django-tailwind + npm
 
-* ⚡ PostgreSQL persistence
+- ⚡ PostgreSQL persistence
 
-* 🐳 Dockerized PostgreSQL + pgAdmin environment
+- 🐳 Dockerized PostgreSQL + pgAdmin environment
 
 ---
 
 # 🛠 Tech Stack
 
-| Technology | Usage |
-|---|---|
-| Django | Backend framework |
-| Django Templates | Server-side rendering |
-| PostgreSQL | Database |
-| TailwindCSS | Styling |
-| django-tailwind | Tailwind integration |
-| Pandas | Excel data processing |
-| NumPy | Data operations |
-| OpenPyXL | Excel generation |
-| ApexCharts | Statistical graphics |
-| Docker | Database containerization |
-| pgAdmin | Database administration |
+| Technology       | Usage                     |
+| ---------------- | ------------------------- |
+| Django           | Backend framework         |
+| Django Templates | Server-side rendering     |
+| PostgreSQL       | Database                  |
+| TailwindCSS      | Styling                   |
+| django-tailwind  | Tailwind integration      |
+| Pandas           | Excel data processing     |
+| NumPy            | Data operations           |
+| OpenPyXL         | Excel generation          |
+| ApexCharts       | Statistical graphics      |
+| Docker           | Database containerization |
+| pgAdmin          | Database administration   |
 
 ---
 
@@ -105,7 +105,7 @@ RecursosHumanos/
 └── README.md
 ```
 
-##  🚀 Installation & Usage
+## 🚀 Installation & Usage
 
 Clone the repository:
 
@@ -119,12 +119,14 @@ cd recursos-humanos-django
 Create the virtual environment depending on your operating system.
 
 ### Linux / macOS
+
 ```bash
 python3 -m venv env
 source env/bin/activate
 ```
 
 ### Windows
+
 ```bash
 python -m venv env
 env\Scripts\activate
@@ -158,13 +160,13 @@ This will start:
 
 ## 🗄 PostgreSQL Configuration
 
-| Variable | Value |
-|---|---|
-| Database | `recursos_humanos` |
-| User | `enterprisedb` |
-| Password | `4444` |
-| Internal Port | `5432` |
-| External Port | `5444` |
+| Variable      | Value              |
+| ------------- | ------------------ |
+| Database      | `recursos_humanos` |
+| User          | `enterprisedb`     |
+| Password      | `4444`             |
+| Internal Port | `5432`             |
+| External Port | `5444`             |
 
 ---
 
@@ -178,10 +180,10 @@ http://localhost:8080
 
 Default credentials:
 
-| Field | Value |
-|---|---|
-| Email | `admin@rh.com` |
-| Password | `admin123` |
+| Field    | Value          |
+| -------- | -------------- |
+| Email    | `admin@rh.com` |
+| Password | `admin123`     |
 
 ---
 
@@ -189,13 +191,13 @@ Default credentials:
 
 When registering the PostgreSQL server inside pgAdmin, use:
 
-| Field | Value |
-|---|---|
-| Host | `postgres` |
-| Port | `5432` |
+| Field    | Value              |
+| -------- | ------------------ |
+| Host     | `postgres`         |
+| Port     | `5432`             |
 | Database | `recursos_humanos` |
-| Username | `enterprisedb` |
-| Password | `4444` |
+| Username | `enterprisedb`     |
+| Password | `4444`             |
 
 ---
 
@@ -229,16 +231,17 @@ http://localhost:8000
 
 The project does not include:
 
-* Default administrator accounts
-* Automatic seeders
-* Automatic report generation
-* Automatic Excel imports
+- Default administrator accounts
+- Automatic seeders
+- Automatic report generation
+- Automatic Excel imports
 
 The administrator user must be created manually the first time.
 
 ### 🔓 Temporary Access Configuration
 
 Open:
+
 ```text
 users/views.py
 ```
@@ -271,9 +274,10 @@ From this panel:
 
 Create a new user
 Provide:
-* Username
-* Email
-* Password
+
+- Username
+- Email
+- Password
 
 #### Important:
 
@@ -330,7 +334,23 @@ The backend is currently designed to read only the first Excel file detected ins
 
 ---
 
-## 📄 Required Excel Files
+## 📄 Excel Templates & Generated Reports
+
+Inside:
+
+```text
+docks/
+```
+
+the repository includes example Excel documents used by the system:
+
+* `Ae2.xlsx`
+* `Ae3.xlsx`
+* `datos.xlsx`
+
+These files serve as reference templates for imports and report generation workflows.
+
+## 📊 Generated Institutional Reports
 
 Inside:
 
@@ -338,27 +358,39 @@ Inside:
 static/informes/
 ```
 
-the repository includes example institutional files:
+the system automatically generates the resulting institutional Excel reports:
 
 * `Ae2.xlsx`
 * `Ae3.xlsx`
 
-Additionally:
+These files represent the exported outputs generated from the processed data stored in PostgreSQL.
 
-The uploaded import file should be named:
+## ⚠ Important Import Process Notes
 
+The uploaded Excel file does not require a specific filename to function correctly.
 
-`datos.xlsx`
+However, it is strongly recommended to upload only a single Excel file at a time into:
 
+```text
+media/uploads/
+```
 
-This file must later be uploaded through the administrator interface inside the data management module.
+The backend is currently designed to automatically detect and process only the first Excel file found inside this directory.
 
-Important:
+For organizational purposes, using the filename:
 
-* Uploading is different from importing
-* The file must first be uploaded before processing/importing data into PostgreSQL
+```text
+datos.xlsx
+```
 
----
+is recommended, although it is not mandatory.
+
+Important distinctions:
+
+* Uploading a file is not the same as importing data
+* The file must first be uploaded through the administrator interface
+* After uploading, the administrator can execute the import process to persist the Excel data into PostgreSQL
+* Only the first detected Excel file inside media/uploads/ will be processed by the backend
 
 ## 📊 System Modules
 
@@ -370,7 +402,6 @@ Important:
 | `graphics`     | Statistical chart visualization    |
 | `templates`    | Server-rendered UI views           |
 | `theme`        | TailwindCSS configuration          |
-
 
 ---
 
@@ -413,7 +444,3 @@ UNLICENSED
 ## 🔗 Repository
 
 [GitHub - Restaurante Presidente Backend](https://github.com/emanuelarevalomartinez/restaurante-backend-nest)
-
-
-
-
