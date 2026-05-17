@@ -44,7 +44,7 @@ class AdminSession(View):
     user = User.objects
 
     def get(self, request):
-      #if( not request.COOKIES.get('autha')): return redirect('login')
+      if( not request.COOKIES.get('autha')): return redirect('login')
       return render(request, self.template)
 
     def post(self,request):

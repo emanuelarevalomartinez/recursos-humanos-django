@@ -21,9 +21,6 @@ static_root/
 dist/
 build/
 
-# Docker
-/docker
-
 # Database
 /db
 

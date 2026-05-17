@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: recursos_humanos_db
+    restart: always
+    environment:
+      POSTGRES_DB: recursos_humanos
+      POSTGRES_USER: enterprisedb
+      POSTGRES_PASSWORD: 4444
+    ports:
+      - "5444:5432"
+    volumes:
+      - ../db:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:8.13
+    container_name: recursos_humanos_pgadmin
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@rh.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:

@@ -201,9 +201,56 @@ When registering the PostgreSQL server inside pgAdmin, use:
 
 ---
 
+## 🗃 Database Migrations
+
+After starting PostgreSQL and installing the dependencies, apply Django migrations to create all required database tables.
+
+Run:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+This will:
+
+- Generate migration files if necessary
+- Create all database tables inside PostgreSQL
+- Initialize Django’s internal tables
+- Prepare the project for first execution
+
+---
+
+## 📦 Install TailwindCSS Dependencies
+
+Inside the Tailwind theme directory, install the frontend dependencies:
+
+```bash
+cd theme/static_src
+npm install
+```
+
+---
+
 ## 🧵 TailwindCSS Setup
 
-Before running the Django server, TailwindCSS must be started in a separate terminal with the virtual environment activated.
+Before running the Django server, TailwindCSS must be started in a separate terminal with the Python virtual environment (`env`) activated.
+
+Activate the virtual environment first.
+
+### Linux / macOS
+
+```bash
+source env/bin/activate
+```
+
+### Windows
+
+```bash
+env\Scripts\activate
+```
+
+Then start the TailwindCSS watcher:
 
 ```bash
 python manage.py tailwind start
@@ -211,15 +258,31 @@ python manage.py tailwind start
 
 This command watches and compiles TailwindCSS styles dynamically.
 
+---
+
 ## ▶ Running the Application
 
-Start the Django development server:
+Before starting the Django development server, make sure the Python virtual environment (`env`) is activated.
+
+### Linux / macOS
+
+```bash
+source env/bin/activate
+```
+
+### Windows
+
+```bash
+env\Scripts\activate
+```
+
+Then run the server:
 
 ```bash
 python manage.py runserver
 ```
 
-By default, the API runs on:
+By default, the application runs on:
 
 ```text
 http://localhost:8000
